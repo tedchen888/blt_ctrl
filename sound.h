@@ -1,6 +1,7 @@
 #ifndef  MY_SOUND_H_
 #define  MY_SOUND_H_
 #include <Arduino.h>
+#include "pitches.h"
 
 /*
 消防车： 以低频频率650Hz至750Hz，高频频率1450Hz至1550Hz， 由低频升至高频时间1.5秒，再由高频降至低频为3.5秒。
@@ -9,7 +10,9 @@
 */
 class MySound {
 public:
-
+  void sound_110();
+  void sound_test();
+  
 private:
   
 };
