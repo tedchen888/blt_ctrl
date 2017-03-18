@@ -32,24 +32,45 @@ void action() {
     //unsigned long now = millis();
     
     //moving
+<<<<<<< HEAD
     if (controller.moving != controller.last_moving) {          
         if (controller.moving == MOVE_FORWARD) {
+=======
+    if (controller.StartAction()) {          
+        if (controller.IsForward()) {
+>>>>>>> origin/master
             digitalWrite(PIN_MOVE_L1, LOW);
-            analogWrite(PIN_MOVE_L2, controller.cur_speed);
+            analogWrite(PIN_MOVE_L2, controller.GetSpeed());
             digitalWrite(PIN_MOVE_R1, LOW);
+<<<<<<< HEAD
             analogWrite(PIN_MOVE_R2, controller.cur_speed);
         } else if (controller.moving == MOVE_BACK) {
             digitalWrite(PIN_MOVE_L2, LOW);
             analogWrite(PIN_MOVE_L1, controller.cur_speed);
             digitalWrite(PIN_MOVE_R2, LOW);
             analogWrite(PIN_MOVE_R1, controller.cur_speed);
+=======
+            analogWrite(PIN_MOVE_R2, controller.GetSpeed());
+        } else if (controller.IsBack()) {
+            digitalWrite(PIN_MOVE_L2, LOW);
+            analogWrite(PIN_MOVE_L1, -controller.GetSpeed());
+            digitalWrite(PIN_MOVE_R2, LOW);
+            analogWrite(PIN_MOVE_R1, -controller.GetSpeed());
+>>>>>>> origin/master
         } else {
             digitalWrite(PIN_MOVE_L1, LOW);
             digitalWrite(PIN_MOVE_L2, LOW);
             digitalWrite(PIN_MOVE_R1, LOW);
             digitalWrite(PIN_MOVE_R2, LOW);
         }
+<<<<<<< HEAD
         controller.last_moving = controller.moving;
+=======
+        //转向
+        myservo.write(controller.GetPos()); 
+        //更新状态  
+        controller.EndAction();     
+>>>>>>> origin/master
     }
 
     //转向

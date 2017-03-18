@@ -19,7 +19,11 @@ const char CMD_END = '\n';
 #define KEY_SOUND "sound"  //on2
 
 //运动状态：停、前、后状态机
+<<<<<<< HEAD
 #define INIT_SPEED 255
+=======
+#define INIT_SPEED 100
+>>>>>>> origin/master
 #define INC_SPEED 20 //加速度
 
 //方向状态：中、左、右状态机
@@ -47,6 +51,7 @@ struct TDirMovingState{
 class MyController
 {
   public:
+<<<<<<< HEAD
     MyController():moving(MOVE_STOP),last_moving(MOVE_STOP),
       cur_speed(INC_SPEED), servo_pos(POS_MID), last_servo_pos(POS_MID),
       is_lighting(false),last_lighting(false),
@@ -57,9 +62,64 @@ class MyController
     void UpdateMoveState();
     void UpdateLightingState();
     void UpdateSoundState();
+=======
+    MyController():dir(DIR_NULL),last_dir(DIR_NULL),
+      cur_speed(0),is_active(false),
+      is_lighting(false),last_lighting(false),
+      is_sound(false), last_sound(false), 
+      last_cmd(""), cur_cmd(""){
+
+      //初始化8种方向与状态的关系
+      dir2state[DIR_NULL].pos = POS_MID;
+      dir2state[DIR_NULL].moving = MOVE_STOP;
+      
+      dir2state[DIR_W].pos = 20;
+      dir2state[DIR_W].moving = MOVE_FORWARD;
+      dir2state[DIR_W_N].pos = 45;
+      dir2state[DIR_W_N].moving = MOVE_FORWARD;
+      dir2state[DIR_N].pos = 90;
+      dir2state[DIR_N].moving = MOVE_FORWARD;
+      dir2state[DIR_N_E].pos = 135;
+      dir2state[DIR_N_E].moving = MOVE_FORWARD;
+      dir2state[DIR_E].pos = 160;
+      dir2state[DIR_E].moving = MOVE_FORWARD;
+      dir2state[DIR_E_S].pos = 135;
+      dir2state[DIR_E_S].moving = MOVE_BACK;
+      dir2state[DIR_S].pos = 90;
+      dir2state[DIR_S].moving = MOVE_BACK;
+      dir2state[DIR_S_W].pos = 45;
+      dir2state[DIR_S_W].moving = MOVE_BACK;      
+    }
+
+    void SetCmd(const String& cmd);
+    
+    void GetNewMoveState();
+    void GetLightingState();
+    void GetSoundState();
+>>>>>>> origin/master
+
+    bool StartAction();
+    void EndAction();
+
+    bool IsForward() {
+      return (dir2state[dir].moving == MOVE_FORWARD);
+    }
+    bool IsBack() {
+      return (dir2state[dir].moving == MOVE_BACK);
+    }
+    int GetSpeed() {
+      return cur_speed;
+    }
+    int GetPos() {
+      return (dir2state[dir].pos);
+    }
+    const TDirMovingState& CurState() const {
+      return dir2state[dir];
+    }
 
     void Stop();
     
+<<<<<<< HEAD
   public:    
     String last_cmd;
     String cur_cmd;
@@ -70,6 +130,18 @@ class MyController
 
     int servo_pos;
     int last_servo_pos;
+=======
+  public:
+    TDirMovingState dir2state[8];
+    
+    String last_cmd;
+    String cur_cmd;
+
+    bool is_active;
+    int dir;
+    int last_dir;
+    int cur_speed;
+>>>>>>> origin/master
     
     //灯光控制
     bool is_lighting;
