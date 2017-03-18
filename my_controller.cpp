@@ -4,26 +4,45 @@ void MyController::SetCmd(const String& cmd) {
   last_cmd = cur_cmd;
   cur_cmd = cmd;
   
-  GetNewMoveState();
-  GetNewDirState();
-  GetLightingState();
-  GetSoundState();
+  if (cmd == KEY_STOP) {
+    Stop();
+  } else {
+    GetNewMoveState();
+    GetNewDirState();
+    GetLightingState();
+    GetSoundState();
+  }
 }
 
 //根据当前运动状态、上次按键、本次按键、按键间隔得到下一步运动状态
 //如果是反方向的先停下来
 void MyController::GetNewMoveState() {
     if (cur_cmd == KEY_FORWARD) {
-      cur_move_state = ((cur_move_state == MOVE_BACK) ? MOVE_STOP : MOVE_FORWARD);
-        //Serial.println("forward");
+      if (cur_speed < 0) {
+        cur_speed = 0;
+      } else if (cur_speed == 0) {
+        cur_speed = INIT_SPEED;
+      }
     } else if (cur_cmd == KEY_BACK) {
-      cur_move_state = ((cur_move_state == MOVE_FORWARD) ? MOVE_STOP : MOVE_BACK);
-        //Serial.println("back");
+      if (cur_speed > 0) {
+        cur_speed = 0;
+      } else if (cur_speed == 0) {
+        cur_speed = -INIT_SPEED;
+      }
     } else if (cur_cmd == KEY_STOP) {
-      cur_move_state = MOVE_STOP;
-        //Serial.println("stop");
-    } else if (cur_cmd == KEY_MOVE_STOP) { //松开按键后停止运动
-      cur_move_state = MOVE_STOP;   
+      cur_speed = 0;
+    } else if (cur_cmd == KEY_SPEED) {
+      if (cur_speed > 0) {
+        cur_speed += INC_SPEED;
+      } else if (cur_speed < 0) {
+        cur_speed -= INC_SPEED;
+      }
+    }
+
+    if (cur_speed > 255) {
+      cur_speed = 255;
+    } else (cur_speed < -255) {
+      cur_speed = -255;
     }
 }
 
@@ -60,7 +79,7 @@ void MyController::GetSoundState() {
 }
 
 void MyController::Stop() {
-  cur_move_state = MOVE_STOP;
+  cur_speed = 0;
   pos = DIR_MID;  
 }
 
