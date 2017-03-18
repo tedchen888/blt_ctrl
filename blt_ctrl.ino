@@ -32,30 +32,27 @@ void action() {
     //unsigned long now = millis();
     
     //moving
-    if (controller.cur_speed != controller.last_speed) {    
-        if (controller.cur_speed > 0) {
+    if (controller.StartAction()) {          
+        if (controller.IsForward()) {
             digitalWrite(PIN_MOVE_L1, LOW);
-            analogWrite(PIN_MOVE_L2, controller.cur_speed);
+            analogWrite(PIN_MOVE_L2, controller.GetSpeed());
             digitalWrite(PIN_MOVE_R1, LOW);
-            analogWrite(PIN_MOVE_R2, controller.cur_speed);
-        } else if (controller.cur_speed < 0) {
+            analogWrite(PIN_MOVE_R2, controller.GetSpeed());
+        } else if (controller.IsBack()) {
             digitalWrite(PIN_MOVE_L2, LOW);
-            analogWrite(PIN_MOVE_L1, -controller.cur_speed);
+            analogWrite(PIN_MOVE_L1, -controller.GetSpeed());
             digitalWrite(PIN_MOVE_R2, LOW);
-            analogWrite(PIN_MOVE_R1, -controller.cur_speed);
+            analogWrite(PIN_MOVE_R1, -controller.GetSpeed());
         } else {
             digitalWrite(PIN_MOVE_L1, LOW);
             digitalWrite(PIN_MOVE_L2, LOW);
             digitalWrite(PIN_MOVE_R1, LOW);
             digitalWrite(PIN_MOVE_R2, LOW);
         }
-        controller.last_speed = controller.cur_speed;
-    }
-    
-    //direction
-    if (controller.pos != controller.last_pos) {  //每次改变转向需要间隔10毫秒    
-        myservo.write(controller.pos);
-        controller.last_pos = controller.pos;
+        //转向
+        myservo.write(controller.GetPos()); 
+        //更新状态  
+        controller.EndAction();     
     }
     
     //lighting
