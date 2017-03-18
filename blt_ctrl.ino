@@ -4,11 +4,11 @@
 Servo myservo; //舵机
 MyController controller;
 
-#define PIN_MOVE_L1 5  //前后控制2，3直流电机脚
-#define PIN_MOVE_L2 6
-#define PIN_MOVE_R1 10
-#define PIN_MOVE_R2 11
-#define PIN_DIRECT 3     //前后控制舵机
+#define PIN_MOVE_L1 2  //前后控制2，3直流电机脚
+#define PIN_MOVE_L2 3
+#define PIN_MOVE_R1 4
+#define PIN_MOVE_R2 5
+#define PIN_DIRECT 6     //前后控制舵机
 #define PIN_LIGHT 7
 #define PIN_SOUND 8
 
@@ -32,31 +32,31 @@ void action() {
     //unsigned long now = millis();
     
     //moving
-    if (controller.cur_speed != controller.last_speed) {    
-        if (controller.cur_speed > 0) {
+    if (controller.moving != controller.last_moving) {          
+        if (controller.moving == MOVE_FORWARD) {
             digitalWrite(PIN_MOVE_L1, LOW);
             analogWrite(PIN_MOVE_L2, controller.cur_speed);
             digitalWrite(PIN_MOVE_R1, LOW);
             analogWrite(PIN_MOVE_R2, controller.cur_speed);
-        } else if (controller.cur_speed < 0) {
+        } else if (controller.moving == MOVE_BACK) {
             digitalWrite(PIN_MOVE_L2, LOW);
-            analogWrite(PIN_MOVE_L1, -controller.cur_speed);
+            analogWrite(PIN_MOVE_L1, controller.cur_speed);
             digitalWrite(PIN_MOVE_R2, LOW);
-            analogWrite(PIN_MOVE_R1, -controller.cur_speed);
+            analogWrite(PIN_MOVE_R1, controller.cur_speed);
         } else {
             digitalWrite(PIN_MOVE_L1, LOW);
             digitalWrite(PIN_MOVE_L2, LOW);
             digitalWrite(PIN_MOVE_R1, LOW);
             digitalWrite(PIN_MOVE_R2, LOW);
         }
-        controller.last_speed = controller.cur_speed;
+        controller.last_moving = controller.moving;
     }
-    
-    //direction
-    if (controller.pos != controller.last_pos) {  //每次改变转向需要间隔10毫秒    
-        myservo.write(controller.pos);
-        controller.last_pos = controller.pos;
-    }
+
+    //转向
+    if (controller.last_servo_pos != controller.servo_pos) {
+      myservo.write(controller.servo_pos); 
+      controller.last_servo_pos = controller.servo_pos;
+    }   
     
     //lighting
     if (controller.is_lighting != controller.last_lighting) {
