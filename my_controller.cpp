@@ -67,5 +67,6 @@ void MyController::UpdateSoundState() {
 void MyController::Stop() {
   moving = MOVE_STOP;  
   servo_pos = POS_MID;
+  cur_speed = INIT_SPEED;
 }
 

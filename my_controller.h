@@ -48,7 +48,7 @@ class MyController
 {
   public:
     MyController():moving(MOVE_STOP),last_moving(MOVE_STOP),
-      cur_speed(INC_SPEED), servo_pos(POS_MID), last_servo_pos(POS_MID),
+      cur_speed(INIT_SPEED), servo_pos(POS_MID), last_servo_pos(POS_MID),
       is_lighting(false),last_lighting(false),
       is_sound(false), last_sound(false), 
       last_cmd(""), cur_cmd(""){}
